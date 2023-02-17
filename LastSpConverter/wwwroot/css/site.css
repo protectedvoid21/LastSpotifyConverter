@@ -1,0 +1,66 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+.container {
+    padding: 10px;
+}
+
+input {
+    border-radius: 5px;
+    background-color: #808080;
+    margin: 15px;
+    border: none;
+    outline: none;
+    font-size: 2em;
+    color: #eeeeee;
+    padding: 10px;
+}
+
+input::placeholder {
+    color: #333333;
+}
+
+input:focus {
+    outline: 1px white solid;
+}
+
+body {
+    background-color: #505050;
+    color: #eeeeee;
+}
+
+.title {
+    text-align: center;
+    font-size: 3em;
+    font-weight: bold;
+    margin: 5vh;
+}
+
+.action-container {
+    text-align: center;
+}
+
+.action-button {
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 2em;
+    width: 150px;
+    display: none;
+}

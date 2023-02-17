@@ -1,0 +1,31 @@
+﻿@page
+@model LastFmDataModel
+
+<div class="title">Playlist converter</div>
+
+<form method="post">
+
+<div class="action-container">
+    <div class="lastfm-input">
+        <label>Your Last.Fm user name</label><br />
+        <span asp-validation-for="@Model.Input.UserName" class="text-danger"></span><br />
+        <input asp-for="@Model.Input.UserName" id="lastfm-name" placeholder="Your name here..."/>
+    </div>
+    <div class="time-choose-container">
+        
+    </div>
+    <button class="action-button">Next</button>
+</div>
+
+</form>
+
+@section Scripts {
+    <script>
+        const lastUserName = document.querySelector('#lastfm-name')
+        const actionButton = document.querySelector('.action-button')
+
+        lastUserName.addEventListener('input', () => {
+            actionButton.style.display = lastUserName.value.length > 0 ? 'inline-block' : 'none'
+        })
+    </script>
+}
