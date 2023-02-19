@@ -1,28 +1,83 @@
 ﻿@page
 @model LastFmDataModel
 
+<style>
+    .label-button {
+        background-color: #666666;
+        color: #eeeeee;
+    }
+
+    .btn-checked {
+        background-color: #33ff44;
+        border: #111111;
+        color: #222222;
+    }
+
+    .action-button {
+        margin: 30px;
+    }
+</style>
+
 <div class="title">Playlist converter</div>
 
 <form method="post">
+    <div class="action-container">
+        <div class="lastfm-input">
+            <label>Your Last.Fm user name</label><br />
+            <span asp-validation-for="@Model.Input.UserName" class="text-danger"></span><br />
+            <input asp-for="@Model.Input.UserName" id="lastfm-name" placeholder="Your name here..."/>
+        </div>
+        <div class="time-choose-container">
+            
+            <label class="btn label-button">
+                Overall
+                <input type="radio" class="btn-check" asp-for="@Model.Input.TrackPeriod" value="@Services.LastFm.TrackPeriod.Overall" />
+            </label>
 
-<div class="action-container">
-    <div class="lastfm-input">
-        <label>Your Last.Fm user name</label><br />
-        <span asp-validation-for="@Model.Input.UserName" class="text-danger"></span><br />
-        <input asp-for="@Model.Input.UserName" id="lastfm-name" placeholder="Your name here..."/>
-    </div>
-    <div class="time-choose-container">
-        
-    </div>
-    <button class="action-button">Next</button>
-</div>
+            <label class="btn label-button">
+                Week
+                <input type="radio" class="btn-check" asp-for="@Model.Input.TrackPeriod" value="@Services.LastFm.TrackPeriod.Week"/>
+            </label>
 
+            <label class="btn label-button">
+                Month
+                <input type="radio" class="btn-check" asp-for="@Model.Input.TrackPeriod" value="@Services.LastFm.TrackPeriod.OneMonth" />
+            </label>
+
+            <label class="btn label-button">
+                3 Months
+                <input type="radio" class="btn-check" asp-for="@Model.Input.TrackPeriod" value="@Services.LastFm.TrackPeriod.ThreeMonths" />
+            </label>
+
+            <label class="btn label-button">
+                6 Months
+                <input type="radio" class="btn-check" asp-for="@Model.Input.TrackPeriod" value="@Services.LastFm.TrackPeriod.HalfYear" />
+            </label>
+
+            <label class="btn label-button">
+                Year
+                <input type="radio" class="btn-check" asp-for="@Model.Input.TrackPeriod" value="@Services.LastFm.TrackPeriod.Year" />
+            </label>
+        </div>
+        <button class="action-button">Next</button>
+    </div>
 </form>
 
 @section Scripts {
     <script>
         const lastUserName = document.querySelector('#lastfm-name')
         const actionButton = document.querySelector('.action-button')
+        const timeButtons = document.querySelectorAll('.btn-check')
+
+        timeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                timeButtons.forEach(otherBtn => {
+                    otherBtn.parentNode.classList.remove('btn-checked')
+                })
+
+                btn.parentNode.classList.add('btn-checked')
+            })
+        })
 
         lastUserName.addEventListener('input', () => {
             actionButton.style.display = lastUserName.value.length > 0 ? 'inline-block' : 'none'

@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using Data;
 using Microsoft.Extensions.Configuration;
 
 namespace Services.LastFm;
@@ -13,8 +12,8 @@ public class LastFmService : ILastFmService {
         this.httpClient = httpClient;
     }
 
-    public async Task<ApiResponse> GetTrackNames(string userName) {
-        string uri = $"?method=user.gettoptracks &api_key={apiKey}&user={userName}&format=json";
+    public async Task<ApiResponse> GetTrackNames(string userName, TrackPeriod trackPeriod) {
+        string uri = $"?method=user.gettoptracks &period={PeriodMap.GetName(trackPeriod)}&api_key={apiKey}&user={userName}&format=json";
         HttpResponseMessage response = await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, uri));
 
         if(response.IsSuccessStatusCode) {

@@ -16,6 +16,8 @@ public class LastFmDataModel : PageModel {
     public class InputModel {
         [Required]
         public string UserName { get; set; }
+        [Required]
+        public TrackPeriod TrackPeriod { get; set; }
     }
 
     public LastFmDataModel(ILastFmService lastFmService, ISpotifyService spotifyService) {
@@ -32,7 +34,7 @@ public class LastFmDataModel : PageModel {
             return Page();
         }
 
-        var apiResponse = await lastFmService.GetTrackNames(Input.UserName);
+        var apiResponse = await lastFmService.GetTrackNames(Input.UserName, Input.TrackPeriod);
 
         if(apiResponse.IsSuccess == false) {
             ModelState.AddModelError("Input.UserName", "User with this name does not exist");
