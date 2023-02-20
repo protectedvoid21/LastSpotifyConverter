@@ -13,5 +13,5 @@ public interface ISpotifyService {
 
     Task<string> GetCurrentUserId();
 
-    Task CreatePlaylist(string userId, IEnumerable<string> trackNames);
+    Task<bool> CreatePlaylist(string userId, IEnumerable<string> trackNames);
 }

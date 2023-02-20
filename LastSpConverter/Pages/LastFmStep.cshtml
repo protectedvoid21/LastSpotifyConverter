@@ -16,6 +16,10 @@
     .action-button {
         margin: 30px;
     }
+
+    .request-info {
+        margin: 30px;
+    }
 </style>
 
 <div class="title">Playlist converter</div>
@@ -29,7 +33,7 @@
         </div>
         <div class="time-choose-container">
             
-            <label class="btn label-button">
+            <label class="btn label-button btn-checked">
                 Overall
                 <input type="radio" class="btn-check" asp-for="@Model.Input.TrackPeriod" value="@Services.LastFm.TrackPeriod.Overall" />
             </label>
@@ -59,6 +63,7 @@
                 <input type="radio" class="btn-check" asp-for="@Model.Input.TrackPeriod" value="@Services.LastFm.TrackPeriod.Year" />
             </label>
         </div>
+        <h3 class="request-info"></h3>
         <button class="action-button">Next</button>
     </div>
 </form>
@@ -68,6 +73,7 @@
         const lastUserName = document.querySelector('#lastfm-name')
         const actionButton = document.querySelector('.action-button')
         const timeButtons = document.querySelectorAll('.btn-check')
+        const requestInfo = document.querySelector(".request-info")
 
         timeButtons.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -82,5 +88,11 @@
         lastUserName.addEventListener('input', () => {
             actionButton.style.display = lastUserName.value.length > 0 ? 'inline-block' : 'none'
         })
+
+        actionButton.addEventListener('click', () => {
+            actionButton.style.display = 'none'
+            requestInfo.textContent = 'Processing playlist creation... (this may take a moment)'
+        })
+
     </script>
 }

@@ -1,25 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using SpotifyAPI.Web;
 
 namespace Services.Spotify;
 
 public class SpotifyService : ISpotifyService {
     private SpotifyClient spotify;
+    private readonly string redirectLink;
     private readonly string clientKey;
     private readonly string clientSecret;
 
     public SpotifyService(IConfiguration configuration) {
+        redirectLink = configuration["SiteUrl"];
         clientKey = configuration["spotify-client"];
         clientSecret = configuration["spotify-secret"];
     }
 
     public Uri GetAuthorizeLink() {
-        var loginRequest = new LoginRequest(new Uri("https://lastspotifyconverter.azurewebsites.net/LastFmStep"), clientKey, LoginRequest.ResponseType.Code) {
+        var loginRequest = new LoginRequest(new Uri(redirectLink + "/LastFmStep"), clientKey, LoginRequest.ResponseType.Code) {
             Scope = new[] { Scopes.PlaylistModifyPublic, Scopes.PlaylistModifyPrivate, Scopes.UserReadEmail, Scopes.UserReadPrivate }
         };
 
@@ -28,7 +25,7 @@ public class SpotifyService : ISpotifyService {
 
     public async Task InitializeByCallback(string code) {
         var response = await new OAuthClient().RequestToken(
-            new AuthorizationCodeTokenRequest(clientKey, clientSecret, code, new Uri("https://lastspotifyconverter.azurewebsites.net/LastFmStep"))
+            new AuthorizationCodeTokenRequest(clientKey, clientSecret, code, new Uri(redirectLink + "/LastFmStep"))
         );
 
         Console.WriteLine($"Response expiration : {response.IsExpired}");
@@ -45,7 +42,7 @@ public class SpotifyService : ISpotifyService {
         return user.Id;
     }
 
-    public async Task CreatePlaylist(string userId, IEnumerable<string> trackNames) {
+    public async Task<bool> CreatePlaylist(string userId, IEnumerable<string> trackNames) {
         List<string> trackUriList = new();
 
         foreach(var track in trackNames) {
@@ -56,7 +53,11 @@ public class SpotifyService : ISpotifyService {
             if(response.Tracks.Items.Count != 0) {
                 trackUriList.Add(response.Tracks.Items[0].Uri);
             }
-        } 
+        }
+
+        if(trackUriList.Count == 0) {
+            return false;
+        }
 
         PlaylistCreateRequest playlistRequest = new("My lastfm") {
             Public = true,
@@ -66,5 +67,6 @@ public class SpotifyService : ISpotifyService {
 
         PlaylistAddItemsRequest playlistAddRequest = new(trackUriList);
         await spotify.Playlists.AddItems(playList.Id, playlistAddRequest);
+        return true;
     }
 }

@@ -17,7 +17,7 @@ public class LastFmDataModel : PageModel {
         [Required]
         public string UserName { get; set; }
         [Required]
-        public TrackPeriod TrackPeriod { get; set; }
+        public TrackPeriod TrackPeriod { get; set; } = TrackPeriod.Overall;
     }
 
     public LastFmDataModel(ILastFmService lastFmService, ISpotifyService spotifyService) {
@@ -43,7 +43,11 @@ public class LastFmDataModel : PageModel {
 
         IEnumerable<string> trackList = await lastFmService.JsonToTrackList(apiResponse.Content);
 
-        await spotifyService.CreatePlaylist(await spotifyService.GetCurrentUserId(), trackList);
+        bool playlistSucceeded = await spotifyService.CreatePlaylist(await spotifyService.GetCurrentUserId(), trackList);
+        if(playlistSucceeded == false) {
+            ModelState.AddModelError("Input.UserName", "Something went wrong with creating playlist. " +
+                "User with this nickname may not have scrobbled anything in selected timespan");
+        }
         return Page();
     }
 }
