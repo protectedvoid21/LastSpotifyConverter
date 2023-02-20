@@ -19,7 +19,7 @@ public class SpotifyService : ISpotifyService {
     }
 
     public Uri GetAuthorizeLink() {
-        var loginRequest = new LoginRequest(new Uri("https://localhost:7162/LastFmStep"), clientKey, LoginRequest.ResponseType.Code) {
+        var loginRequest = new LoginRequest(new Uri("https://lastspotifyconverter.azurewebsites.net/LastFmStep"), clientKey, LoginRequest.ResponseType.Code) {
             Scope = new[] { Scopes.PlaylistModifyPublic, Scopes.PlaylistModifyPrivate, Scopes.UserReadEmail, Scopes.UserReadPrivate }
         };
 
@@ -28,7 +28,7 @@ public class SpotifyService : ISpotifyService {
 
     public async Task InitializeByCallback(string code) {
         var response = await new OAuthClient().RequestToken(
-            new AuthorizationCodeTokenRequest(clientKey, clientSecret, code, new Uri("https://localhost:7162/LastFmStep"))
+            new AuthorizationCodeTokenRequest(clientKey, clientSecret, code, new Uri("https://lastspotifyconverter.azurewebsites.net/LastFmStep"))
         );
 
         Console.WriteLine($"Response expiration : {response.IsExpired}");
