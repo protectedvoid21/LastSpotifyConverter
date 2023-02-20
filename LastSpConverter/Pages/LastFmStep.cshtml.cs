@@ -7,6 +7,7 @@ using Services.Spotify;
 namespace LastSpConverter.Pages; 
 
 public class LastFmDataModel : PageModel {
+    private ILogger<LastFmDataModel> logger;
     private readonly ILastFmService lastFmService;
     private readonly ISpotifyService spotifyService;
 
@@ -20,12 +21,14 @@ public class LastFmDataModel : PageModel {
         public TrackPeriod TrackPeriod { get; set; } = TrackPeriod.Overall;
     }
 
-    public LastFmDataModel(ILastFmService lastFmService, ISpotifyService spotifyService) {
+    public LastFmDataModel(ILogger<LastFmDataModel> logger, ILastFmService lastFmService, ISpotifyService spotifyService) {
+        this.logger = logger;
         this.lastFmService = lastFmService;
         this.spotifyService = spotifyService;
     }
 
     public async Task OnGet(string code) {
+        logger.LogInformation("Getting authorization from spotify");
         await spotifyService.InitializeByCallback(code);
     }
 

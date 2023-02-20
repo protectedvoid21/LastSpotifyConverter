@@ -28,8 +28,6 @@ public class SpotifyService : ISpotifyService {
             new AuthorizationCodeTokenRequest(clientKey, clientSecret, code, new Uri(redirectLink + "/LastFmStep"))
         );
 
-        Console.WriteLine($"Response expiration : {response.IsExpired}");
-
         var config = SpotifyClientConfig
             .CreateDefault()
             .WithAuthenticator(new AuthorizationCodeAuthenticator(clientKey, clientSecret, response));
