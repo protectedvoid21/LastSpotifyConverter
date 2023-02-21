@@ -1,18 +1,15 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using SpotifyAPI.Web;
 
 namespace Services.Spotify;
 
 public class SpotifyService : ISpotifyService {
-    private ILogger<SpotifyService> logger;
     private SpotifyClient spotify;
     private readonly string redirectLink;
     private readonly string clientKey;
     private readonly string clientSecret;
 
-    public SpotifyService(ILogger<SpotifyService> logger, IConfiguration configuration) {
-        this.logger = logger;
+    public SpotifyService(IConfiguration configuration) {
         redirectLink = configuration["SiteUrl"];
         clientKey = configuration["spotify-client"];
         clientSecret = configuration["spotify-secret"];
@@ -39,14 +36,8 @@ public class SpotifyService : ISpotifyService {
     }
 
     public async Task<string> GetCurrentUserId() {
-        try {
-            var user = await spotify.UserProfile.Current();
-            return user.Id;
-        }
-        catch(APIException ex) {
-            logger.LogError(ex.Message);
-        }
-        return "Error";
+        PrivateUser user = await spotify.UserProfile.Current();
+        return user.Id;
     }
 
     public async Task<bool> CreatePlaylist(string userId, IEnumerable<string> trackNames) {

@@ -46,9 +46,7 @@ public class LastFmDataModel : PageModel {
 
         IEnumerable<string> trackList = await lastFmService.JsonToTrackList(apiResponse.Content);
 
-        string userId = await spotifyService.GetCurrentUserId();
-
-        bool playlistSucceeded = await spotifyService.CreatePlaylist(userId, trackList);
+        bool playlistSucceeded = await spotifyService.CreatePlaylist(await spotifyService.GetCurrentUserId(), trackList);
         if(playlistSucceeded == false) {
             ModelState.AddModelError("Input.UserName", "Something went wrong with creating playlist. " +
                 "User with this nickname may not have scrobbled anything in selected timespan");
