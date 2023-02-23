@@ -2,6 +2,11 @@
 
 Link to website : https://lastspotifyconverter.azurewebsites.net
 
+# Important
+
+As Spotify api is shared by default in Development Mode the website won't get your request and will throw an error. As long as application won't get Quota Extension from
+Spotify, the server will return an error because of missing authorization. To proceed a user, I must add his name and email to whitelist so he will be able to access Spotify api through my app. To find if the website is working, the best solution is to download the code, create your own Spotify application, get the client_id and secret_id, pass them to application and then the lastFm tracks will appear as a playlist on Spotify account.
+
 # What is this website doing?
 
 LastSpotifyConverter will get your spotify authorization to read data (to get your userId) and add new playlist to your account. After that you will be redirected to
