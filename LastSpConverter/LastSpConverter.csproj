@@ -14,6 +14,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="7.0.3" />
     <PackageReference Include="NLog" Version="5.1.2" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="5.2.2" />
+    <PackageReference Include="SpotifyAPI.Web" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
