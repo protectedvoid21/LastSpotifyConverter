@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using SpotifyAPI.Web;
+using SpotifyAPI.Web.Http;
 
 namespace Services.Spotify;
 
@@ -17,7 +18,7 @@ public class SpotifyService : ISpotifyService {
 
     public Uri GetAuthorizeLink() {
         var loginRequest = new LoginRequest(new Uri(redirectLink + "/LastFmStep"), clientKey, LoginRequest.ResponseType.Code) {
-            Scope = new[] { Scopes.PlaylistModifyPublic, Scopes.PlaylistModifyPrivate, Scopes.UserReadEmail, Scopes.UserReadPrivate }
+            Scope = new[] { Scopes.PlaylistModifyPrivate, Scopes.PlaylistModifyPublic, Scopes.UserReadEmail, Scopes.UserReadPrivate }
         };
 
         return loginRequest.ToUri();
@@ -30,6 +31,7 @@ public class SpotifyService : ISpotifyService {
 
         var config = SpotifyClientConfig
             .CreateDefault()
+            .WithHTTPLogger(new SimpleConsoleHTTPLogger())
             .WithAuthenticator(new AuthorizationCodeAuthenticator(clientKey, clientSecret, response));
 
         spotify = new SpotifyClient(config);
